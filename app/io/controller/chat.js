@@ -3,9 +3,9 @@
  */
 module.exports = () => {
     return async function () {
-        const message = this.args[0];
-       // const say = await this.service.user.say();
-        this.socket.emit('res', message);
+        const message = JSON.parse(this.args[0]);
+        const toSocketId = await  this.app.redis.get(message.sendTo);
+        this.app.io.to(toSocketId).emit('res', JSON.stringify(message.data));
     };
 };
 

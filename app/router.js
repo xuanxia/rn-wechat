@@ -18,6 +18,9 @@ module.exports = app => {
 
 
   /*聊天socket相关*/
-  app.io.route('chat', app.io.controllers.chat);
-  app.io.of('/chat').route('chat', app.io.controllers.chat);
+   app.io.route('login', app.io.controllers.login);
+   app.io.route('chat', app.io.controllers.chat);
+   app.io.route('groupChat', app.io.controllers.groupChat);
+
+ // app.io.of('/chat').route('chat', app.io.controllers.chat);
 };

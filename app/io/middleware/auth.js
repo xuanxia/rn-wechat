@@ -3,13 +3,16 @@
  */
 module.exports = app => {
 
-    return function* (next,b) {
-      //  yield this.service.socketClient.addClient(this.socket);
-        //console.log(app.io.sockets);
-
+    return function* (next) {
+      //TODO 对socket连接进行合法校验
         yield* next;
-        // execute when disconnect.
-        console.log('disconnection!');
-       // yield this.service.socketClient.deleteClient(this.socket);
+        // execute when disconnect
+        // 将下线的用户从缓存中剔除
+        const token = yield  this.app.redis.get(this.req.socket.id);
+        yield this.app.redis.del(token);
+        yield this.app.redis.del(this.req.socket.id);
+        // TODO 根据用户token 查询用户信息打印log
+        console.log('XXX 下线了');
+
     };
 };

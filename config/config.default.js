@@ -51,7 +51,7 @@ module.exports = appInfo => {
         client: {
             host: '120.27.125.78',
             port: 6379,
-            password: 'XXXXXXX',
+            password: 'xuanxia2015',
             db: 0,
         },
 
@@ -61,8 +61,8 @@ module.exports = appInfo => {
         database: 'rn-wechat',
         host: '120.27.125.78',
         port: '3306',
-        username: 'XXXXX',
-        password: 'XXXXX',
+        username: 'admin',
+        password: 'admin',
         define: {
             // 字段以下划线（_）来分割（默认是驼峰命名风格）
             underscored: false,
