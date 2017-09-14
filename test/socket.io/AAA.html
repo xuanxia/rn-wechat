@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AAAAAA</title>
+    <script src="https://cdn.bootcss.com/socket.io/2.0.3/socket.io.js"></script>
+</head>
+<body>
+<H1>AAAAAA</H1>
+</body>
+<script>
+    var socket = io('http://localhost:7001');
+    socket.on('connect', () => {
+        socket.emit('chat', 'AAAAAA');
+    });
+
+    socket.on('res', msg => {
+        console.log('res from server: %s!', msg);
+    });
+</script>
+</html>
