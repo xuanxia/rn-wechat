@@ -16,7 +16,7 @@ module.exports = app => {
             return relationResult;
         }
         async updateRelation(id,relation){
-            const relationModel = await this.ctx.model.User.findById(id);
+            const relationModel = await this.ctx.model.Relation.findById(id);
             if (!relationModel) {
                 // this.ctx.throw(404, 'user not found');
             }

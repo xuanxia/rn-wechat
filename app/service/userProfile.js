@@ -19,6 +19,11 @@ module.exports = app => {
             });
             return userProfileResult;
         }
+        async queryUserProfile(userId){
+            const userProfileResult =await this.model.UserProfile.findOne({userId});
+            return userProfileResult;
+        }
+
         // 根据条件查询用户 分页
         // { offset = 0, limit = 10, order_by = 'createdAt', order = 'ASC'}
         async queryUserByCondition(queryData){

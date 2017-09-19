@@ -3,6 +3,7 @@
  */
 const uuidv1 = require('uuid/v1');
 const crypto = require('crypto');
+const LoginPrefixKey = 'LOGIN';
 module.exports = app => {
     class UserService extends app.Service {
         constructor(ctx){
@@ -21,24 +22,29 @@ module.exports = app => {
                 return user;
         }
         //用户登录
-        async userlogin(userInfo){
+        async userLogin(userInfo){
                 const user = await this.checkUser(userInfo);
                 if(user){
                     // 往redis中写用户信息 默认30天过期
-                    await app.redis.set(user.id, JSON.stringify(user), 'EX', 30*24*60*60);
+                    await app.redis.set(LoginPrefixKey+user.userId, JSON.stringify(user), 'EX', 30*24*60*60);
                     return user;
                 }else{
                      app.emit('error', '登录失败', this);
                 }
         }
-
+        async userLogout(token){
+           const result = await app.redis.del(LoginPrefixKey+token);
+           return result;
+        }
         async checkUser(userInfo){
                 let hash = crypto.createHash('sha1');
                 hash.update(userInfo.password);
                 const rePassWord = hash.digest('hex');
                 const user = await this.model.User.findByAccount(userInfo.account);
                 if(rePassWord == user.dataValues.password){
-                    return user.dataValues
+                    const userId = user.dataValues.id;
+                    const userProfile = await this.model.UserProfile.findOne({userId:userId});
+                    return userProfile.dataValues
                 }else{
                     return false;
                 }

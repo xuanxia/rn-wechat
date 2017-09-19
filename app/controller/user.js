@@ -5,8 +5,13 @@ module.exports = app => {
     class UserController extends app.Controller {
         async login(){
             const { ctx,service} = this;
-            const account = await service.user.userlogin(ctx.request.body);
+            const account = await service.user.userLogin(ctx.request.body);
             ctx.body = { data: account };
+        }
+        async logout(){
+            const { ctx,service} = this;
+            const result = await service.user.userLogout(ctx.request.user.userId);
+            ctx.body = { data: result };
         }
         async register(){
             const { ctx,service} = this;
@@ -25,12 +30,26 @@ module.exports = app => {
             const user = await service.user.getUserInSession(ctx.request.body.token);
             ctx.body = { data: user };
         }
+        async getUserProfile(){
+            const { ctx,service} = this;
+            const userProfile = await service.userProfile.queryUserProfile(ctx.request.body.userId);
+            ctx.body = { data: userProfile };
+        }
 
-
+        //获取用户资料列表
         async queryUserList(){
             const { ctx,service} = this;
             const userList = await service.userProfile.queryUserByCondition(ctx.request.body || {});
             ctx.body = { data: userList };
+        }
+
+       //补全用户信息
+        async addUserProfile(){
+            const { ctx,service} = this;
+            const prams = ctx.request.body;
+            prams['userId'] = ctx.request.user.userId;
+            const userProfile = await service.userProfile.createUserProfile(prams);
+            ctx.body = { data: userProfile };
         }
 
     }

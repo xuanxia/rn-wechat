@@ -12,7 +12,6 @@ module.exports = app => {
         yield this.app.redis.del(token);
         yield this.app.redis.del(this.req.socket.id);
         // TODO 根据用户token 查询用户信息打印log
-        console.log('XXX 下线了');
-
+        console.log(token+'下线了');
     };
 };

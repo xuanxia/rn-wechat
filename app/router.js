@@ -5,10 +5,14 @@ module.exports = app => {
 
   /*用户信息相关*/
   app.post('/api/user.login',app.controller.user.login);
+  app.post('/api/user.logout',app.controller.user.logout);
   app.post('/api/user.register',app.controller.user.register);
   app.post('/api/user.query_list',app.controller.user.queryUserList);
   app.post('/api/user.get.info',app.controller.user.getInfo);
-  /*联系人相关*/
+  app.post('/api/user.add.user.profile',app.controller.user.addUserProfile);
+  app.post('/api/user.get.user.profile',app.controller.user.getUserProfile);
+
+    /*联系人相关*/
   app.post('/api/contact.list',app.controller.contact.getList);
 
   /*好友关系相关*/
