@@ -21,12 +21,12 @@ module.exports = app => {
         });
        console.log(token);*/
         /*=====service测试结束====*/
-         this.ctx.body = await ctx.service.userProfile.createUserProfile({
+        /* this.ctx.body = await ctx.service.userProfile.createUserProfile({
             userId:'1'+Date.now(),
             nickName:'昵称'+Date.now(),
             sex: Math.random() > 0.5?1:2,
             phone:'15180135001',
-        });
+        });*/
        /* ctx.service.group.createGroup({
             groupName:'data.groupName',
             createUser:'data.createUser',

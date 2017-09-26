@@ -3,7 +3,7 @@
  */
 const uuidv1 = require('uuid/v1');
 const crypto = require('crypto');
-const LoginPrefixKey = 'LOGIN';
+
 module.exports = app => {
     class UserService extends app.Service {
         constructor(ctx){
@@ -26,14 +26,16 @@ module.exports = app => {
                 const user = await this.checkUser(userInfo);
                 if(user){
                     // 往redis中写用户信息 默认30天过期
-                    await app.redis.set(LoginPrefixKey+user.userId, JSON.stringify(user), 'EX', 30*24*60*60);
+                    const token = uuidv1();
+                    await app.redis.set(token, JSON.stringify(user), 'EX', 30*24*60*60);
+                    user['token'] = token;
                     return user;
                 }else{
                      app.emit('error', '登录失败', this);
                 }
         }
         async userLogout(token){
-           const result = await app.redis.del(LoginPrefixKey+token);
+           const result = await app.redis.del(token);
            return result;
         }
         async checkUser(userInfo){
