@@ -8,19 +8,15 @@ module.exports = app => {
             this.model = this.ctx.model;
 
         }
-        async createUserProfile(userProfile){
-            const userProfileResult = await this.model.UserProfile.create({
-                userId:userProfile.userId,
-                nickName:userProfile.nickName,
-                avatar:userProfile.avatar,
-                sex:userProfile.sex,
-                phone:userProfile.phone,
-                timeLineTopPic:userProfile.timeLineTopPic,
-            });
-            return userProfileResult;
+        async updateUserProfile(userProfile){
+            const userProModel = await this.model.UserProfile.findById(userProfile.id);
+            if(!userProModel){
+                // 不存在
+            }
+            return await userProModel.update(userProfile);
         }
         async queryUserProfile(userId){
-            const userProfileResult =await this.model.UserProfile.findOne({userId});
+            const userProfileResult =await this.model.UserProfile.findOne({where:{userId}});
             return userProfileResult;
         }
 

@@ -22,8 +22,8 @@ module.exports = app =>{
             {fields:['account']}
         ],
     });
-    User.findByAccount = async (account) =>{
-        return await User.findOne({ account: account });
+    User.findByAccount = function* (account){
+        return yield this.findOne({ account: account });
     };
     return User;
 };

@@ -1,14 +1,14 @@
 /**
  * Created by kangxiaojian on 2017/8/24.
  */
-const LoginPreixKey = 'LOGIN';
+
 module.exports = app => {
     return function* (next) {
         const {request,response,logger,service} = this;
         let prams = request.body;
         logger.info('请求json: %j', request.body);
        //TODO 这里对参数进行校验 做个拦截器
-        const userInfo = yield service.user.checkUserInSession(LoginPreixKey+prams.token);
+        const userInfo = yield service.user.checkUserInSession(prams.token);
         if(prams.token && userInfo){
             //往request对象中挂载一个user对象 当前请求用户的信息
             request.user = userInfo;

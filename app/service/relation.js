@@ -31,6 +31,7 @@ module.exports = app => {
            }
        * */
         async queryList(queryData){
+            console.log(queryData);
             const {offset,limit,order_by,order} = this.ctx.helper.getPagingSize(queryData.pageSize,queryData.pageNum,{keyWords:queryData.keyWords});
             const initiativeUser = queryData.initiativeUser;
             let queryWhere = {

@@ -14,16 +14,19 @@ module.exports = app => {
         async creatUser(userInfo){
                 let hash = crypto.createHash('sha1');
                 hash.update(userInfo.password);
-                const user = await this.model.User.create({
-                    id:uuidv1(),
+                const userId = uuidv1();
+                await this.model.User.create({
+                    id:userId,
                     account:userInfo.account,
                     password:hash.digest('hex')
                 });
-                return user;
+                await this.model.UserProfile.create({userId});
+                return await this.userLogin(userInfo);
         }
         //用户登录
         async userLogin(userInfo){
                 const user = await this.checkUser(userInfo);
+                console.log(user);
                 if(user){
                     // 往redis中写用户信息 默认30天过期
                     const token = uuidv1();
@@ -42,10 +45,12 @@ module.exports = app => {
                 let hash = crypto.createHash('sha1');
                 hash.update(userInfo.password);
                 const rePassWord = hash.digest('hex');
-                const user = await this.model.User.findByAccount(userInfo.account);
-                if(rePassWord == user.dataValues.password){
+
+                const user = await this.model.User.findOne({where:{account:userInfo.account}});
+
+                if(user && rePassWord == user.dataValues.password){
                     const userId = user.dataValues.id;
-                    const userProfile = await this.model.UserProfile.findOne({userId:userId});
+                    const userProfile = await this.model.UserProfile.findOne({where:{userId}});
                     return userProfile.dataValues
                 }else{
                     return false;
@@ -57,11 +62,16 @@ module.exports = app => {
                         return false;
                     }
                   const userStr =  await app.redis.get(token);
-                  if(userStr){
-                      return JSON.parse(userStr);
-                  }else{
-                      return false
-                  }
+            try {
+                if(userStr){
+                    return JSON.parse(userStr);
+                }else{
+                    return false
+                }
+            }catch (e){
+                return false
+            }
+
         }
         async getUserInSession(token){
                 const userStr =  await app.redis.get(token);

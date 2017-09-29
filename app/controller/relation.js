@@ -6,7 +6,7 @@ module.exports = app => {
         async addFriend(){
             const { ctx,service} = this;
             const relation = {
-                initiativeUser:ctx.request.body.token,
+                initiativeUser:ctx.request.user.userId,
                 acceptUser:ctx.request.body.acceptUser
             };
             const result = await service.relation.createRelation(relation);

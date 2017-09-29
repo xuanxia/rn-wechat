@@ -21,6 +21,7 @@ module.exports = app => {
             };
             // 校验参数
             ctx.validate(createRule);
+            //TODO 唯一性校验
             const account = await service.user.creatUser(ctx.request.body);
             ctx.body = { data: account };
         }
@@ -47,8 +48,14 @@ module.exports = app => {
         async addUserProfile(){
             const { ctx,service} = this;
             const prams = ctx.request.body;
-            prams['userId'] = ctx.request.user.userId;
-            const userProfile = await service.userProfile.createUserProfile(prams);
+            const createRule = {
+                nickName:{ type: 'string' },
+                avatar:{ type: 'string' },
+                phone:{ type: 'string' },
+            };
+            // 校验参数
+            ctx.validate(createRule);
+            const userProfile = await service.userProfile.updateUserProfile(prams);
             ctx.body = { data: userProfile };
         }
 
